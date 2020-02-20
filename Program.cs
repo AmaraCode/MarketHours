@@ -83,7 +83,7 @@ namespace MarketHours
             foreach (Market m in markets)
             {
                 //If the market is within 1 hour of closing then display that line in red, otherwise 
-                if (currentUTC >= m.MarketCloseUTC -100 )
+                if (Math.Abs(currentUTC - m.MarketCloseUTC) < 100 )
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
