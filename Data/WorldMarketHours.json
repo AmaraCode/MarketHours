@@ -930,9 +930,9 @@
     "UTCLunch": "No"
   },
   {
-    "Name": "Saint Vincent and the Grenadines Saint Vincent and the Grenadines Exchange",
+    "Name": "Saint Vincent / Grenadines Exchange",
     "ID": "SVGEX",
-    "Country": "Saint Vincent and the Grenadines",
+    "Country": "Saint Vincent / Grenadines",
     "City": "Kingstown",
     "Zone": "AST",
     "ZoneOffset": 4,

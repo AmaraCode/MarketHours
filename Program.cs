@@ -3,6 +3,7 @@ using MarketHours.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 
 namespace MarketHours
 {
@@ -51,7 +52,7 @@ namespace MarketHours
 
 
                 //Call the service to get a current list of open markets based on UtcTime
-                var openMarkets = service.OpenMarkets(_utcTime);
+                var openMarkets = service.OpenMarkets(_utcTime).OrderBy(x => x.Name);
                 
                 //Call method to display to the screen
                 DisplayOpen(openMarkets, _utcTime);
@@ -75,8 +76,8 @@ namespace MarketHours
 
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("{0, -10} {1, -10} {2, -50}", "Open", "Close", "Name");  //Composite Formatting
-            Console.WriteLine(new string('-', 80));
+            Console.WriteLine("{0, -10} {1, -10} {2, -50} {3, -20}", "Open", "Close", "Name", "City");  //Composite Formatting
+            Console.WriteLine(new string('-', 100));
 
             //Loop through each item in the markets collection
             foreach (Market m in markets)
@@ -93,7 +94,7 @@ namespace MarketHours
 
 
                 //Using Composite Formatting to display the market item
-                Console.WriteLine("{0, -10} {1, -10} {2, -50}", m.MarketOpenUTC.ToString("0000"), m.MarketCloseUTC.ToString("0000"), m.Name);
+                Console.WriteLine("{0, -10} {1, -10} {2, -50} {3, -20}", m.MarketOpenUTC.ToString("0000"), m.MarketCloseUTC.ToString("0000"), m.Name, m.City);
             }
 
 
