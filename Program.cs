@@ -26,7 +26,8 @@ namespace MarketHours
             var service = HourService.CreateNew();
 
             //Varialbe to hold time number in 24hr format
-            int UtcTime;
+            int _utcTime;
+            int _localTime;
 
             //This loop could be better setup with cancellation or something better than CTRL-C to exit
             bool success = true;
@@ -35,23 +36,25 @@ namespace MarketHours
                 Console.Clear();
 
                 //Set the time variable to the hour-minute of current UTC time
-                UtcTime = DateTime.UtcNow.TimeOfDay.Hours * 100 + DateTime.UtcNow.TimeOfDay.Minutes;
+                _utcTime = DateTime.UtcNow.TimeOfDay.Hours * 100 + DateTime.UtcNow.TimeOfDay.Minutes;
+                _localTime = DateTime.Now.TimeOfDay.Hours * 100 + DateTime.Now.TimeOfDay.Minutes;
 
 
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Welcome to the Market Open Project");
                 
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"Current UTC Hour is {UtcTime.ToString("0000")}");
-                
+                Console.WriteLine($"Current UTC Hour is {_utcTime.ToString("0000")}");
+                Console.WriteLine($"Current Local Hour is {_localTime.ToString("0000")}");
+
                 Console.WriteLine("");
 
 
                 //Call the service to get a current list of open markets based on UtcTime
-                var openMarkets = service.OpenMarkets(UtcTime);
+                var openMarkets = service.OpenMarkets(_utcTime);
                 
                 //Call method to display to the screen
-                DisplayOpen(openMarkets, UtcTime);
+                DisplayOpen(openMarkets, _utcTime);
 
 
                 //Set the timeout and sleep for a minute.
