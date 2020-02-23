@@ -38,9 +38,11 @@ namespace MarketHours
 
                 //Set the time variable to the hour-minute of current UTC time
                 _utcTime = DateTime.UtcNow.TimeOfDay.Hours * 100 + DateTime.UtcNow.TimeOfDay.Minutes;
+                //_utcTime = 0230;
                 _localTime = DateTime.Now.TimeOfDay.Hours * 100 + DateTime.Now.TimeOfDay.Minutes;
 
 
+                Console.CursorVisible = false;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Welcome to the Market Open Project");
                 
@@ -57,6 +59,16 @@ namespace MarketHours
                 //Call method to display to the screen
                 DisplayOpen(openMarkets, _utcTime);
 
+
+                //display footer
+                Console.WriteLine(new string('-', 100));
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Indicates market open first hour");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Indicates market open last hour");
+
+
+                Console.CursorTop = 0;
 
                 //Set the timeout and sleep for a minute.
                 timeout = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
@@ -83,14 +95,19 @@ namespace MarketHours
             foreach (Market m in markets)
             {
                 //If the market is within 1 hour of closing then display that line in red, otherwise 
-                if (Math.Abs(currentUTC - m.MarketCloseUTC) <= 100 )
+                if (Math.Abs(currentUTC - m.MarketCloseUTC) < 100 )
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else if (Math.Abs(currentUTC - m.MarketOpenUTC) < 100)
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
+                
 
 
                 //Using Composite Formatting to display the market item

@@ -47,7 +47,7 @@ namespace MarketHours.Services
             try
             {
                 //setup the file variable with path and filename
-                string file = Environment.CurrentDirectory + "\\WorldMarketHours.json";
+                string file = Environment.CurrentDirectory + "\\Data\\WorldMarketHours.json";
                 Debug.WriteLine($"Market DataFile: {file}");
 
                 //Using AmaraCodes class to handle the FileIO and reading the collection from the json file.
