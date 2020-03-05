@@ -67,6 +67,7 @@ namespace MarketHours
                 Console.WriteLine("Indicates market open first hour");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Indicates market open last hour");
+                Console.ForegroundColor = ConsoleColor.White;
 
 
                 Console.CursorTop = 0;
