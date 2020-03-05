@@ -36,6 +36,7 @@ namespace MarketHours
             {
                 Console.Clear();
 
+
                 //Set the time variable to the hour-minute of current UTC time
                 _utcTime = DateTime.UtcNow.TimeOfDay.Hours * 100 + DateTime.UtcNow.TimeOfDay.Minutes;
                 //_utcTime = 0230;
@@ -45,7 +46,7 @@ namespace MarketHours
                 Console.CursorVisible = false;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Welcome to the Market Open Project");
-                
+
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Current UTC Hour is {_utcTime.ToString("0000")}");
                 Console.WriteLine($"Current Local Hour is {_localTime.ToString("0000")}");
@@ -54,8 +55,8 @@ namespace MarketHours
 
 
                 //Call the service to get a current list of open markets based on UtcTime
-                var openMarkets = service.OpenMarkets(_utcTime).OrderBy(x => x.Name);
-                
+                var openMarkets = service.OpenMarkets(_utcTime).OrderBy(x => x.Name).ToList();
+
                 //Call method to display to the screen
                 DisplayOpen(openMarkets, _utcTime);
 
@@ -83,8 +84,18 @@ namespace MarketHours
         /// </summary>
         /// <param name="markets"></param>
         /// <param name="currentUTC"></param>
-        static void DisplayOpen(IEnumerable<Market> markets, int currentUTC)
+        static void DisplayOpen(IList<Market> markets, int currentUTC)
         {
+            //first check to see if there are any open markets
+            if (markets.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                System.Console.WriteLine("");
+                System.Console.WriteLine("ALL MARKETS ARE CURRENTLY CLOSED");
+                System.Console.WriteLine("");
+
+
+            }
 
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -95,7 +106,7 @@ namespace MarketHours
             foreach (Market m in markets)
             {
                 //If the market is within 1 hour of closing then display that line in red, otherwise 
-                if (Math.Abs(currentUTC - m.MarketCloseUTC) < 100 )
+                if (Math.Abs(currentUTC - m.MarketCloseUTC) < 100)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
@@ -107,7 +118,7 @@ namespace MarketHours
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
-                
+
 
 
                 //Using Composite Formatting to display the market item

@@ -21,7 +21,7 @@ namespace MarketHours.Services
         /// </summary>
         public HourService()
         {
-            _markets = new List<Market>();  
+            _markets = new List<Market>();
             LoadMarketData();
         }
 
@@ -80,22 +80,32 @@ namespace MarketHours.Services
         /// </summary>
         /// <param name="UtcTime"></param>
         /// <returns></returns>
-        public IEnumerable<Market> OpenMarkets(int UtcTime = 0)
+        public IList<Market> OpenMarkets(int UtcTime = 0)
         {
+
             //create list to return
             List<Market> openMarkets = new List<Market>();
 
 
+            //first determine if markets are open.
+            if (MarketIsClosed())
+            {
+                return openMarkets;  //yea it is empty
+            }
+
+
+
+
             //if UtcTime was not passed in then read the time from the system
-            if (UtcTime == 0 )
+            if (UtcTime == 0)
             {
                 UtcTime = DateTime.UtcNow.TimeOfDay.Hours * 100 + DateTime.UtcNow.TimeOfDay.Minutes;
             }
-            
+
 
             //Loop through all the markets to figure out which are open. 
             //We chose this over a fat LINQ statement which would be harder to read
-            foreach(Market mkt in _markets)
+            foreach (Market mkt in _markets)
             {
 
                 //There may be markets that overlap the 24 hour mark due to using UTC
@@ -107,10 +117,10 @@ namespace MarketHours.Services
                         openMarkets.Add(mkt);
                     }
                 }
-                else  
+                else
                 {
                     //The rest of the markets that do not overlap 24hrs mark work simply.
-                    if(UtcTime >= mkt.MarketOpenUTC && UtcTime < mkt.MarketCloseUTC)
+                    if (UtcTime >= mkt.MarketOpenUTC && UtcTime < mkt.MarketCloseUTC)
                     {
                         openMarkets.Add(mkt);
                     }
@@ -119,7 +129,30 @@ namespace MarketHours.Services
             }
 
             return openMarkets;
-        }           
+        }
+
+
+        /// <summary>
+        /// Forex markets are closed from Friday GMT (2200) - Sunday GMT (2200)
+        /// </summary>
+        /// <returns></returns>
+        private bool MarketIsClosed()
+        {
+            bool closed = false;
+
+            //Set the time variable to the hour-minute of current UTC time
+            int utcTime = DateTime.UtcNow.TimeOfDay.Hours * 100 + DateTime.UtcNow.TimeOfDay.Minutes;
+            DayOfWeek dayOfWeek = DateTime.UtcNow.DayOfWeek;
+
+            if ((dayOfWeek == DayOfWeek.Friday && utcTime >= 2200) ||
+                 (dayOfWeek == DayOfWeek.Saturday) ||
+                 (dayOfWeek == DayOfWeek.Sunday && utcTime <= 2200))
+            {
+                closed = true;
+            }
+
+            return closed;
+        }
 
     }
 }
