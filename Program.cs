@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MarketHours
 {
@@ -16,11 +17,74 @@ namespace MarketHours
 
         static int timeout = 0;
 
+
         /// <summary>
         /// Entry Point - currently expecting no parameters
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
+        {
+
+
+            Console.WriteLine("Press ESC to Exit");
+
+            var taskKeys = new Task(ReadKeys);
+            var taskProcessFiles = new Task(CheckMarkets);
+
+            taskKeys.Start();
+            taskProcessFiles.Start();
+
+            var tasks = new[] { taskKeys };
+            Task.WaitAll(tasks);
+
+
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Thank you for playing....");
+        }
+
+
+        public static void ReadKeys()
+        {
+            ConsoleKeyInfo key = new ConsoleKeyInfo();
+
+            while (!Console.KeyAvailable && key.Key != ConsoleKey.Escape)
+            {
+
+                key = Console.ReadKey(true);
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        //Console.WriteLine("UpArrow was pressed");
+                        break;
+                    case ConsoleKey.DownArrow:
+                        //Console.WriteLine("DownArrow was pressed");
+                        break;
+
+                    case ConsoleKey.RightArrow:
+                        //Console.WriteLine("RightArrow was pressed");
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                        //Console.WriteLine("LeftArrow was pressed");
+                        break;
+
+                    case ConsoleKey.Escape:
+                        break;
+
+                    default:
+                        if (Console.CapsLock && Console.NumberLock)
+                        {
+                            Console.WriteLine(key.KeyChar);
+                        }
+                        break;
+                }
+            }
+        }
+
+
+        public static void CheckMarkets()
         {
 
             //Create Instance of the HourService which will handle all IO
@@ -32,7 +96,9 @@ namespace MarketHours
 
             //This loop could be better setup with cancellation or something better than CTRL-C to exit
             bool success = true;
-            while (success)
+
+
+            while (success == true)
             {
                 Console.Clear();
 
@@ -61,13 +127,6 @@ namespace MarketHours
                 DisplayOpen(openMarkets, _utcTime);
 
 
-                //display footer
-                Console.WriteLine(new string('-', 100));
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Indicates market open first hour");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Indicates market open last hour");
-                Console.ForegroundColor = ConsoleColor.White;
 
 
                 Console.CursorTop = 0;
@@ -97,34 +156,48 @@ namespace MarketHours
 
 
             }
-
-
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("{0, -10} {1, -10} {2, -50} {3, -20}", "Open", "Close", "Name", "City");  //Composite Formatting
-            Console.WriteLine(new string('-', 100));
-
-            //Loop through each item in the markets collection
-            foreach (Market m in markets)
+            else
             {
-                //If the market is within 1 hour of closing then display that line in red, otherwise 
-                if (Math.Abs(currentUTC - m.MarketCloseUTC) < 100)
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("{0, -10} {1, -10} {2, -50} {3, -20}", "Open", "Close", "Name", "City");  //Composite Formatting
+                Console.WriteLine(new string('-', 100));
+
+                //Loop through each item in the markets collection
+                foreach (Market m in markets)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                }
-                else if (Math.Abs(currentUTC - m.MarketOpenUTC) < 100)
-                {
+                    //If the market is within 1 hour of closing then display that line in red, otherwise 
+                    if (Math.Abs(currentUTC - m.MarketCloseUTC) < 100)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else if (Math.Abs(currentUTC - m.MarketOpenUTC) < 100)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
+
+
+
+                    //Using Composite Formatting to display the market item
+                    Console.WriteLine("{0, -10} {1, -10} {2, -50} {3, -20}", m.MarketOpenUTC.ToString("0000"), m.MarketCloseUTC.ToString("0000"), m.Name, m.City);
+
+
+                    //display footer
+                    Console.WriteLine(new string('-', 100));
                     Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Indicates market open first hour");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Indicates market open last hour");
+                    Console.ForegroundColor = ConsoleColor.White;
+
                 }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
 
-
-
-                //Using Composite Formatting to display the market item
-                Console.WriteLine("{0, -10} {1, -10} {2, -50} {3, -20}", m.MarketOpenUTC.ToString("0000"), m.MarketCloseUTC.ToString("0000"), m.Name, m.City);
             }
+
+
 
 
         }
