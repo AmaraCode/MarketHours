@@ -67,7 +67,7 @@ namespace MarketHours
                         break;
 
                     case ConsoleKey.LeftArrow:
-                        //Console.WriteLine("LeftArrow was pressed");
+                        Console.WriteLine("LeftArrow was pressed");
                         break;
 
                     case ConsoleKey.Escape:
@@ -184,17 +184,19 @@ namespace MarketHours
                     //Using Composite Formatting to display the market item
                     Console.WriteLine("{0, -10} {1, -10} {2, -50} {3, -20}", m.MarketOpenUTC.ToString("0000"), m.MarketCloseUTC.ToString("0000"), m.Name, m.City);
 
-
-                    //display footer
-                    Console.WriteLine(new string('-', 100));
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("Indicates market open first hour");
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Indicates market open last hour");
-                    Console.ForegroundColor = ConsoleColor.White;
-
                 }
 
+            }
+
+            if (markets.Count > 0)
+            {
+                //display footer
+                Console.WriteLine(new string('-', 100));
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Indicates market open first hour");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Indicates market open last hour");
+                Console.ForegroundColor = ConsoleColor.White;
             }
 
 
