@@ -83,6 +83,14 @@ namespace MarketHours.Services
         public IList<Market> OpenMarkets(int UtcTime = 0)
         {
 
+
+            //TODO: modify this method to utilize the Offset 
+            //the Offset was recently updated to be accurate 
+            //The current code does not take into account the accurate
+            //UTC time.  U.S. markets show closed for the first hour
+            //in my timezone when they are actually open.  This cascades to 
+            //all markets because of the Offset not being used.
+
             //create list to return
             List<Market> openMarkets = new List<Market>();
 
