@@ -2,18 +2,19 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>MarketHours</AssemblyName>
     <RootNamespace>MarketHours</RootNamespace>
   </PropertyGroup>
 
+    
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="copy $(ProjectDir)Data\WorldMarketHours.json $(TargetDir)WorldMarketHours.json" />
   </Target>
 
   <ItemGroup>
     <Reference Include="amaracode">
-      <HintPath>..\..\production\amaracode.dll</HintPath>
+      <HintPath>..\..\..\production\libraries\amaracode.dll</HintPath>
     </Reference>
   </ItemGroup>
 

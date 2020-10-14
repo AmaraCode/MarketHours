@@ -40,7 +40,7 @@ namespace MarketHours
 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Thank you for playing....");
+            Console.WriteLine("Thank you....");
         }
 
 
@@ -121,6 +121,9 @@ namespace MarketHours
 
 
                 //Call the service to get a current list of open markets based on UtcTime
+
+                //this is a test
+                //var openMarkets = service.OpenMarkets(1440).OrderBy(x => x.Name).ToList();
                 var openMarkets = service.OpenMarkets(_utcTime).OrderBy(x => x.Name).ToList();
 
                 //Call method to display to the screen

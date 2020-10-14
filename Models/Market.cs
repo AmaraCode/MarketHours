@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace MarketHours.Models
 {
 
-    
+
     public class Market
     {
         public string Name { get; set; }
@@ -27,20 +27,38 @@ namespace MarketHours.Models
         public int MarketOpenUTC
         {
             get
-            { 
-                return Convert.ToInt32(UTCOpen); 
+            {
+                try
+                {
+                    return Convert.ToInt32(UTCOpen);
+                }
+                catch
+                {
+                    return default(int);
+                }
+
             }
         }
 
         [JsonIgnore]
         public int MarketCloseUTC
         {
+
             get
             {
-                return Convert.ToInt32(UTCClose);
+                try
+                {
+                    return Convert.ToInt32(UTCClose);
+                }
+                catch
+                {
+                    return default(int);
+                }
+
+
             }
         }
-            
+
 
     }
 

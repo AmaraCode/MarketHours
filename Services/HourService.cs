@@ -52,7 +52,8 @@ namespace MarketHours.Services
 
                 //Using AmaraCodes class to handle the FileIO and reading the collection from the json file.
                 AmaraCode.FileIO fileIO = new AmaraCode.FileIO();
-                _markets = fileIO.GetCollection<IList<Market>>(file);
+                //_markets = fileIO.GetCollection<IList<Market>>(file);
+                _markets = fileIO.GetCollectionJSON<IList<Market>>(file);
             }
             catch (Exception ex)
             {
